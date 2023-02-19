@@ -145,6 +145,15 @@ class _CalculatorPageState extends State<CalculatorPage> {
       numberOne = '';
       numberTwo = '';
       result = null;
+    } else if (symbol == '-/+') {
+      if (numberTwo.isNotEmpty && numberTwo[0] == '-') {
+        numberTwo = numberTwo.substring(1);
+      } else {
+        if (numberTwo.isEmpty) {
+          numberTwo = '1';
+        }
+        numberTwo = '-$numberTwo';
+      }
     } else if (symbol == '=') {
       result = _calculate();
     }
