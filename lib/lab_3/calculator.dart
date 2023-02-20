@@ -121,7 +121,7 @@ class _CalculatorPageState extends State<CalculatorPage> {
         }
       } else {
         if (isComma) {
-          if (numberTwo.contains(',')) {
+          if (numberTwo.contains('.')) {
             return;
           }
           numberTwo = '$numberTwo.';
