@@ -44,7 +44,7 @@ class _CalculatorPageState extends State<CalculatorPage> {
               child: Row(
                 children: [
                   const Text('Ответ: '),
-                  if (result != null) Text('$result'),
+                  if (result != null) Text('${result?.replaceAll('.', ',')}'),
                 ],
               ),
             ),
@@ -61,7 +61,7 @@ class _CalculatorPageState extends State<CalculatorPage> {
                   if (enteredOperation.isNotEmpty)
                     Text(enteredOperation)
                   else if (numberTwo.isNotEmpty)
-                    Text(numberTwo)
+                    Text(numberTwo.replaceAll('.', ','))
                 ],
               ),
             ),
@@ -104,7 +104,8 @@ class _CalculatorPageState extends State<CalculatorPage> {
     final num = int.tryParse(symbol);
     // final number = this.numberTwo;
     final isComma = symbol == ',';
-    if (num != null || isComma) {
+    final isNum = num != null;
+    if (isNum || isComma) {
       if (enteredOperation.isNotEmpty) {
         numberOne = numberTwo;
         numberTwo = '';
@@ -114,7 +115,7 @@ class _CalculatorPageState extends State<CalculatorPage> {
 
       if (numberTwo.isEmpty) {
         if (isComma) {
-          numberTwo = '0,';
+          numberTwo = '0.';
         } else {
           numberTwo = num.toString();
         }
@@ -123,7 +124,7 @@ class _CalculatorPageState extends State<CalculatorPage> {
           if (numberTwo.contains(',')) {
             return;
           }
-          numberTwo = '$numberTwo,';
+          numberTwo = '$numberTwo.';
         } else {
           numberTwo = '$numberTwo$num';
         }
@@ -160,12 +161,10 @@ class _CalculatorPageState extends State<CalculatorPage> {
   }
 
   String _calculate() {
-    final numberOne = this.numberOne;
-    final numberTwo = this.numberTwo;
-    final operation = this.operation;
     if (numberTwo.isEmpty || numberOne.isEmpty) {
       return '';
     }
+    final operation = this.operation;
     final firstNum = num.parse(numberOne);
     final secondNum = num.parse(numberTwo);
     num result;
@@ -185,8 +184,11 @@ class _CalculatorPageState extends State<CalculatorPage> {
       default:
         result = firstNum;
     }
-    this.numberTwo = result.toString();
-    this.numberOne = '';
+    if (result % 1 == 0) {
+      result = result.toInt();
+    }
+    numberTwo = result.toString();
+    numberOne = '';
     return result.toString();
   }
 }
