@@ -25,7 +25,7 @@ class _ToDoEditPageState extends State<ToDoEditPage> {
   void initState() {
     super.initState();
     titleEditingController = TextEditingController(text: widget.toDo.title);
-    textEditingController = TextEditingController(text: widget.toDo.title);
+    textEditingController = TextEditingController(text: widget.toDo.text);
     _dateFinished = widget.toDo.dateFinished;
     _isDone = widget.toDo.isDone;
   }

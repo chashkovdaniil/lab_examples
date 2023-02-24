@@ -53,9 +53,9 @@ class ToDoNotifier extends InheritedNotifier<_ToDoNotifier> {
 
     int compare(ToDo a, ToDo b) {
       if (a.isDone && !b.isDone) {
-        return -1;
-      } else if (!a.isDone && b.isDone) {
         return 1;
+      } else if (!a.isDone && b.isDone) {
+        return -1;
       }
       if (a.isDone && b.isDone) {
         return a.dateCreated.compareTo(b.dateCreated);
@@ -63,11 +63,11 @@ class ToDoNotifier extends InheritedNotifier<_ToDoNotifier> {
 
       if (a.dateFinished != null || b.dateFinished != null) {
         if (a.dateFinished != null && b.dateFinished == null) {
-          return 1;
+          return -1;
         }
 
         if (a.dateFinished == null && b.dateFinished != null) {
-          return -1;
+          return 1;
         }
 
         if (a.dateFinished != null && b.dateFinished != null) {
@@ -79,6 +79,6 @@ class ToDoNotifier extends InheritedNotifier<_ToDoNotifier> {
     }
 
     list.sort(compare);
-    return list.reversed.toList();
+    return list;
   }
 }
