@@ -1,6 +1,8 @@
 import 'package:examples/lab_1/lab_1.dart';
 import 'package:examples/lab_2/quadratic_equation.dart';
 import 'package:examples/lab_3/calculator.dart';
+import 'package:examples/lab_5/to_do_inherited.dart';
+import 'package:examples/lab_5/to_do_list.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -12,17 +14,20 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+    return ToDoNotifier(
+      child: MaterialApp(
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        routes: {
+          HelloWorldPage.routeName: (_) => const HelloWorldPage(),
+          QuadraticEquation.routeName: (_) => const QuadraticEquation(),
+          CalculatorPage.routeName: (_) => const CalculatorPage(),
+          ToDoList.routeName: (_) => const ToDoList(),
+        },
+        home: const MyHomePage(title: 'Examples of Flutter'),
       ),
-      routes: {
-        HelloWorldPage.routeName: (_) => const HelloWorldPage(),
-        QuadraticEquation.routeName: (_) => const QuadraticEquation(),
-        CalculatorPage.routeName: (_) => const CalculatorPage(),
-      },
-      home: const MyHomePage(title: 'Examples of Flutter'),
     );
   }
 }
@@ -41,6 +46,7 @@ class _MyHomePageState extends State<MyHomePage> {
     HelloWorldPage.routeName,
     QuadraticEquation.routeName,
     CalculatorPage.routeName,
+    ToDoList.routeName,
   ];
 
   @override
