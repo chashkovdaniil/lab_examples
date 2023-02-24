@@ -1,9 +1,9 @@
-import 'package:examples/lab_5/to_do_add_page.dart';
-import 'package:examples/lab_5/to_do_edit_page.dart';
-import 'package:examples/lab_5/to_do_inherited.dart';
 import 'package:flutter/material.dart';
 
+import 'to_do_add_page.dart';
 import 'to_do_app_bar.dart';
+import 'to_do_edit_page.dart';
+import 'to_do_inherited.dart';
 import 'to_do_model.dart';
 
 class ToDoList extends StatelessWidget {

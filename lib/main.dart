@@ -1,9 +1,10 @@
-import 'package:examples/lab_1/lab_1.dart';
-import 'package:examples/lab_2/quadratic_equation.dart';
-import 'package:examples/lab_3/calculator.dart';
-import 'package:examples/lab_5/to_do_inherited.dart';
-import 'package:examples/lab_5/to_do_list.dart';
 import 'package:flutter/material.dart';
+
+import 'lab_1/lab_1.dart';
+import 'lab_2/quadratic_equation.dart';
+import 'lab_3/calculator.dart';
+import 'lab_4/to_do_inherited.dart';
+import 'lab_4/to_do_list.dart';
 
 void main() {
   runApp(const MyApp());
