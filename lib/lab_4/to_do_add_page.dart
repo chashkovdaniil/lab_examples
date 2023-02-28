@@ -4,6 +4,8 @@ import 'package:examples/lab_4/to_do_model.dart';
 import 'package:examples/lab_4/to_do_style.dart';
 import 'package:flutter/material.dart';
 
+import '../utils.dart';
+
 class ToDoAddPage extends StatefulWidget {
   static const routeName = '/todo_add';
 
@@ -44,80 +46,87 @@ class _ToDoAddPageState extends State<ToDoAddPage> {
         appBar: const ToDoAppBar(
           title: 'Добавление',
         ),
-        body: Column(
+        body: ListView(
+          padding: EdgeInsets.all(20),
           children: [
-            Expanded(
-              child: ListView(
-                children: [
-                  TextFormField(
-                    controller: titleEditingController,
-                    validator: (val) {
-                      if (val == null || val.isEmpty) {
-                        return 'Укажите значение';
-                      }
-                      return null;
-                    },
-                    decoration: InputDecoration(
-                      label: Text('Укажите заголовок *'),
-                    ),
-                  ),
-                  TextFormField(
-                    controller: textEditingController,
-                    decoration: InputDecoration(
-                      label: Text('Укажите описание *'),
-                    ),
-                    validator: (val) {
-                      if (val == null || val.isEmpty) {
-                        return 'Укажите значение';
-                      }
-                      return null;
-                    },
-                  ),
-                  Row(
+            TextFormField(
+              controller: titleEditingController,
+              validator: (val) {
+                if (val == null || val.isEmpty) {
+                  return 'Укажите значение';
+                }
+                return null;
+              },
+              decoration: InputDecoration(
+                label: Text.rich(
+                  TextSpan(
+                    text: 'Укажите заголовок ',
                     children: [
-                      if (_dateFinished != null)
-                        Text(
-                          '${_dateFinished?.day}.${_dateFinished?.month}.${_dateFinished?.year}',
-                        ),
-                      TextButton(
-                        onPressed: () async {
-                          final date = await showDatePicker(
-                            context: context,
-                            initialDate: _dateFinished ?? DateTime.now(),
-                            firstDate: DateTime.now(),
-                            lastDate: DateTime(2030, 01, 01),
-                          );
-                          _dateFinished = date;
-                          setState(() {});
-                        },
-                        child: const Text('Указать дату дедлайна'),
+                      TextSpan(
+                        text: '*',
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              color: Colors.red,
+                            ),
                       ),
                     ],
                   ),
-                ],
+                ),
               ),
             ),
+            TextFormField(
+              controller: textEditingController,
+              decoration: const InputDecoration(
+                label: Text('Краткое описание'),
+              ),
+              minLines: 1,
+              maxLines: null,
+              validator: (_) => null,
+            ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                ElevatedButton(
-                  onPressed: () {
-                    if (_key.currentState?.validate() == true) {
-                      final toDo = ToDo(
-                        id: id,
-                        title: titleEditingController.text,
-                        text: textEditingController.text,
-                        dateCreated: DateTime.now(),
-                        dateFinished: _dateFinished,
-                      );
-                      ToDoNotifier.of(context).add(toDo);
-                      Navigator.pop(context);
-                    }
+                if (_dateFinished != null)
+                  Text(
+                    Utils.formatDate(_dateFinished),
+                  ),
+                TextButton(
+                  onPressed: () async {
+                    final date = await showDatePicker(
+                      context: context,
+                      initialDate: _dateFinished ?? DateTime.now(),
+                      firstDate: DateTime(2020, 01, 01),
+                      lastDate: DateTime(2030, 01, 01),
+                    );
+                    _dateFinished = date;
+                    setState(() {});
                   },
-                  child: Text("Сохранить"),
-                  style: ToDoStyle.buttonStyle,
+                  child: const Text('Указать дату дедлайна'),
                 ),
               ],
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      if (_key.currentState?.validate() == true) {
+                        final toDo = ToDo(
+                          id: id,
+                          title: titleEditingController.text,
+                          text: textEditingController.text,
+                          dateCreated: DateTime.now(),
+                          dateFinished: _dateFinished,
+                        );
+                        ToDoNotifier.of(context).add(toDo);
+                        Navigator.pop(context);
+                      }
+                    },
+                    child: Text("Сохранить"),
+                    style: ToDoStyle.buttonStyle,
+                  ),
+                ],
+              ),
             )
           ],
         ),

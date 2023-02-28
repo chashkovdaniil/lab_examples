@@ -50,17 +50,23 @@ class ToDoCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final dateFinished = toDo.dateFinished;
-    final isExpired = dateFinished?.compareTo(DateTime.now()) == -1;
+    final dateNow = DateTime.now();
+    final isExpired = dateFinished?.compareTo(DateTime(
+          dateNow.year,
+          dateNow.month,
+          dateNow.day,
+        )) ==
+        -1;
 
     String title = toDo.title;
-    String text = toDo.text;
+    String? text = toDo.text;
 
     if (title.length > 15) {
-      toDo.title.substring(0, 15);
+      title = '${title.substring(0, 15)}...';
     }
 
-    if (text.length > 70) {
-      toDo.text.substring(0, 70);
+    if (text != null && text.length > 70) {
+      text = '${text.substring(0, 70)}...';
     }
 
     return InkWell(
@@ -75,12 +81,16 @@ class ToDoCard extends StatelessWidget {
         );
       },
       child: Card(
-        color: isExpired ? Colors.redAccent : Colors.white,
+        color: toDo.isDone
+            ? Colors.grey.shade300
+            : isExpired
+                ? Colors.redAccent
+                : Colors.white,
         margin: const EdgeInsets.only(bottom: 25),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(25),
         ),
-        elevation: 8,
+        elevation: toDo.isDone ? 0 : 8,
         child: Padding(
           padding: const EdgeInsets.all(20.0),
           child: Column(
@@ -95,14 +105,15 @@ class ToDoCard extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 10),
-              Text(
-                text,
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  decoration: toDo.isDone
-                      ? TextDecoration.lineThrough
-                      : TextDecoration.none,
+              if (text != null)
+                Text(
+                  text,
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    decoration: toDo.isDone
+                        ? TextDecoration.lineThrough
+                        : TextDecoration.none,
+                  ),
                 ),
-              ),
               if (dateFinished != null) ...[
                 const SizedBox(height: 10),
                 Text(

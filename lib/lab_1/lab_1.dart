@@ -13,6 +13,19 @@ class HelloWorldPage extends StatefulWidget {
 
 class _HelloWorldPageState extends State<HelloWorldPage> {
   bool _show = false;
+  late final TextEditingController textEditingController;
+
+  @override
+  void initState() {
+    super.initState();
+    textEditingController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    textEditingController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,15 +38,20 @@ class _HelloWorldPageState extends State<HelloWorldPage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const Spacer(),
-            AnimatedOpacity(
-              opacity: _show ? 1.0 : 0.0,
-              duration: baseDuration,
-              child: const Text('Hello, world!'),
+            TextField(
+              controller: textEditingController,
+              decoration: InputDecoration(hintText: 'Введите текст'),
             ),
             const SizedBox(height: 10),
             ElevatedButton(
-              onPressed: () => setState(() => _show = !_show),
-              child: const Text('Отобразить'),
+              onPressed: () => setState(() {}),
+              child: Text('Отобразить'),
+            ),
+            const SizedBox(height: 10),
+            AnimatedOpacity(
+              opacity: textEditingController.value.text.isNotEmpty ? 1.0 : 0.0,
+              duration: baseDuration,
+              child: Text(textEditingController.value.text),
             ),
             const Spacer(),
           ],

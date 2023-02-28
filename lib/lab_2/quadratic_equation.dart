@@ -57,18 +57,18 @@ class _QuadraticEquationState extends State<QuadraticEquation> {
               textEditingController: _textEditingControllerC,
               symbol: 'C',
             ),
-            Container(
-              width: double.infinity,
-              margin: EdgeInsets.all(20),
-              padding: EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                color: Colors.grey.shade300,
-              ),
-              child: Column(
-                children: [
-                  const Text('Ответ: '),
-                  if (_result.isNotEmpty)
+            if (_result.isNotEmpty)
+              Container(
+                width: double.infinity,
+                margin: EdgeInsets.all(20),
+                padding: EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: Colors.grey.shade100,
+                ),
+                child: Column(
+                  children: [
+                    const Text('Ответ '),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -81,31 +81,34 @@ class _QuadraticEquationState extends State<QuadraticEquation> {
                         ]
                       ],
                     ),
-                ],
-              ),
-            ),
-            const Spacer(),
-          ],
-        ),
-      ),
-      bottomNavigationBar: Padding(
-        padding: EdgeInsets.all(10),
-        child: ElevatedButton(
-          child: Text('Вычислить'),
-          onPressed: () {
-            try {
-              _calculate();
-            } on FormatException catch (_) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(
-                    'Нельзя такое вводить и все значения должны быть заполнены',
-                  ),
+                  ],
                 ),
-              );
-            }
-            setState(() {});
-          },
+              ),
+            const Spacer(),
+            SizedBox(
+              width: double.infinity,
+              child: Padding(
+                padding: EdgeInsets.all(10),
+                child: ElevatedButton(
+                  child: Text('Вычислить'),
+                  onPressed: () {
+                    try {
+                      _calculate();
+                    } on FormatException catch (_) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            'Нельзя такое вводить и все значения должны быть заполнены',
+                          ),
+                        ),
+                      );
+                    }
+                    setState(() {});
+                  },
+                ),
+              ),
+            )
+          ],
         ),
       ),
     );
@@ -119,7 +122,7 @@ class _QuadraticEquationState extends State<QuadraticEquation> {
 
     if (a == 0) {
       if (b == 0) {
-        _result.add('Нет корня');
+        _result.add('Нет корней');
         return;
       }
       final x = -c / b;
@@ -129,7 +132,7 @@ class _QuadraticEquationState extends State<QuadraticEquation> {
     }
     final d = b * b - 4 * a * c;
     if (d < 0) {
-      _result.add('Нет корня');
+      _result.add('Нет корней');
       return;
     }
     if (d == 0) {

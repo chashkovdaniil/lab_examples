@@ -11,11 +11,11 @@ class CalculatorPage extends StatefulWidget {
 
 class _CalculatorPageState extends State<CalculatorPage> {
   final grid = [
-    ['AC', '-/+', 'X', '/'],
-    ['1', '2', '3', '-'],
-    ['4', '5', '6', '+'],
-    ['7', '8', '9', ','],
-    ['0', '=']
+    ['AC', '+/-', '/'],
+    ['7', '8', '9', 'X'],
+    ['4', '5', '6', '-'],
+    ['1', '2', '3', '+'],
+    ['0', ',', '=']
   ];
 
   // String? numberEntered;
@@ -34,60 +34,54 @@ class _CalculatorPageState extends State<CalculatorPage> {
       body: SafeArea(
         child: Column(
           children: [
+            const Spacer(),
             Container(
               margin: const EdgeInsets.all(20),
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: Colors.grey.shade300,
+                color: Colors.grey.shade100,
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Row(
                 children: [
-                  const Text('Ответ: '),
-                  if (result != null) Text('${result?.replaceAll('.', ',')}'),
-                ],
-              ),
-            ),
-            Container(
-              margin: const EdgeInsets.all(20),
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: Colors.grey.shade300,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Row(
-                children: [
-                  const Text('Введено: '),
-                  if (enteredOperation.isNotEmpty)
-                    Text(enteredOperation)
-                  else if (numberTwo.isNotEmpty)
-                    Text(numberTwo.replaceAll('.', ','))
+                  Expanded(
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      reverse: true,
+                      child: Text(
+                        numberTwo.replaceAll('.', ','),
+                        maxLines: 1,
+                        textAlign: TextAlign.right,
+                        style: Theme.of(context).textTheme.headline5,
+                      ),
+                    ),
+                  )
                 ],
               ),
             ),
             const Spacer(),
             for (final row in grid)
               Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   for (final symbol in row)
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: ConstrainedBox(
-                          constraints: const BoxConstraints(
-                            maxWidth: 80,
-                            maxHeight: 80,
-                          ),
-                          child: AspectRatio(
-                            aspectRatio: 1,
-                            child: ElevatedButton(
-                              onPressed: () {
-                                _onTap(symbol);
+                    Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(
+                          maxWidth: _getFlex(symbol) == 2 ? 160 : 70,
+                          maxHeight: 80,
+                        ),
+                        child: SizedBox(
+                          width: _getFlex(symbol) == 2 ? 160 : 70,
+                          height: 70,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              _onTap(symbol);
 
-                                setState(() {});
-                              },
-                              child: Text(symbol),
-                            ),
+                              setState(() {});
+                            },
+                            child: Text(symbol),
                           ),
                         ),
                       ),
@@ -101,6 +95,9 @@ class _CalculatorPageState extends State<CalculatorPage> {
   }
 
   _onTap(String symbol) {
+    if (numberTwo == 'Ошибка') {
+      numberTwo = '0';
+    }
     final num = int.tryParse(symbol);
     // final number = this.numberTwo;
     final isComma = symbol == ',';
@@ -113,7 +110,7 @@ class _CalculatorPageState extends State<CalculatorPage> {
         enteredOperation = '';
       }
 
-      if (numberTwo.isEmpty) {
+      if (numberTwo.isEmpty || double.parse(numberTwo) == 0.0) {
         if (isComma) {
           numberTwo = '0.';
         } else {
@@ -142,11 +139,13 @@ class _CalculatorPageState extends State<CalculatorPage> {
     } else if (symbol == 'AC') {
       enteredOperation = '';
       operation = '';
-      // this.numberEntered = null;
       numberOne = '';
       numberTwo = '';
       result = null;
-    } else if (symbol == '-/+') {
+    } else if (symbol == '+/-') {
+      if (double.parse(numberTwo) == 0.0) {
+        return;
+      }
       if (numberTwo.isNotEmpty && numberTwo[0] == '-') {
         numberTwo = numberTwo.substring(1);
       } else {
@@ -189,6 +188,16 @@ class _CalculatorPageState extends State<CalculatorPage> {
     }
     numberTwo = result.toString();
     numberOne = '';
+    if (numberTwo == 'Infinity') {
+      numberTwo = 'Ошибка';
+      return 'Ошибка';
+    }
     return result.toString();
+  }
+
+  int _getFlex(String symbol) {
+    if (symbol == 'AC') return 2;
+    if (symbol == '0') return 2;
+    return 1;
   }
 }

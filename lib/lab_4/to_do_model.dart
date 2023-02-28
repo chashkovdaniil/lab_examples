@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class ToDo {
   final int id;
   final String title;
-  final String text;
+  final String? text;
   final DateTime dateCreated;
   final DateTime? dateFinished;
   final bool isDone;
